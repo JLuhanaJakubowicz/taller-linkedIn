@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial: Cómo crear una cuenta en LinkedIn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --li-blue: #0A66C2;
+      --li-blue-dark: #0856A8;
+      --li-blue-light: #E8F0FE;
+      --li-blue-border: #B5D4F4;
+      --success-bg: #EAF3DE;
+      --success-border: #C0DD97;
+      --success-text: #3B6D11;
+      --warn-bg: #FAEEDA;
+      --warn-border: #FAC775;
+      --warn-text: #633806;
+      --border: #e0e0e0;
+      --border-light: #f0f0f0;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --text-hint: #999;
+      --bg: #f4f2ee;
+      --surface: #ffffff;
+      --surface-secondary: #f8f8f6;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .li-logo-badge {
+      width: 44px;
+      height: 44px;
+      background: var(--li-blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .page-header-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .page-header-text p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ── Progress ── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--li-blue);
+      border-radius: 99px;
+      transition: width 0.45s cubic-bezier(.4,0,.2,1);
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      min-width: 52px;
+      text-align: right;
+    }
+
+    /* ── Step pills ── */
+    .steps-nav {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .step-pill:hover { background: var(--surface-secondary); }
+
+    .step-pill.active {
+      background: var(--li-blue);
+      color: #fff;
+      border-color: var(--li-blue);
+    }
+
+    .step-pill.done {
+      background: var(--success-bg);
+      color: var(--success-text);
+      border-color: var(--success-border);
+    }
+
+    .step-pill .pill-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-pill:not(.active) .pill-num {
+      background: var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .step-pill.done .pill-num {
+      background: var(--success-border);
+      color: var(--success-text);
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 1.25rem 1.5rem;
+      background: var(--surface-secondary);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--li-blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-header-text .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-header-text .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* ── Browser mockup ── */
+    .browser {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .browser-bar {
+      background: #f1f1f1;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FEBC2E; }
+    .dot-g { background: #28C840; }
+
+    .url-bar {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: monospace;
+    }
+
+    .browser-content {
+      padding: 1rem 1.25rem;
+      background: #fff;
+    }
+
+    /* ── LinkedIn mock elements ── */
+    .li-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .li-wordmark {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--li-blue);
+      letter-spacing: -1px;
+    }
+
+    .li-btn-row { display: flex; gap: 8px; }
+
+    .li-btn-p {
+      background: var(--li-blue);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .li-btn-o {
+      background: transparent;
+      color: var(--li-blue);
+      border: 1.5px solid var(--li-blue);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .li-hero-h { font-size: 20px; font-weight: 700; color: #1d1d1d; margin-bottom: 5px; }
+    .li-hero-s { font-size: 13px; color: #555; }
+
+    /* ── Form mock ── */
+    .form-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .field-group { display: flex; flex-direction: column; gap: 3px; }
+    .field-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+
+    .field-input {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .field-input.active-field { border-color: var(--li-blue); box-shadow: 0 0 0 3px rgba(10,102,194,0.12); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* ── Alert boxes ── */
+    .tip-box, .warn-box, .success-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    .tip-box { background: var(--li-blue-light); border: 1px solid var(--li-blue-border); color: #185FA5; }
+    .warn-box { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-text); }
+    .success-box { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-text); }
+
+    .tip-box i, .warn-box i, .success-box i { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Checklist ── */
+    .checklist { display: flex; flex-direction: column; gap: 9px; margin-bottom: 1.5rem; }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-primary);
+    }
+
+    .check-item i { font-size: 17px; flex-shrink: 0; margin-top: 2px; color: var(--success-text); }
+
+    /* ── OTP mock ── */
+    .otp-wrap { display: flex; gap: 8px; justify-content: center; margin: 1rem 0; }
+
+    .otp-cell {
+      width: 42px;
+      height: 50px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--li-blue);
+    }
+
+    .otp-cell.filled { border-color: var(--li-blue); background: var(--li-blue-light); }
+
+    /* ── Profile preview ── */
+    .profile-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      background: #fff;
+    }
+
+    .profile-cover {
+      height: 72px;
+      background: linear-gradient(120deg, #0A66C2 0%, #00669E 100%);
+    }
+
+    .profile-inner { padding: 0 1.25rem 1.25rem; }
+
+    .profile-ava {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--surface-secondary);
+      border: 3px solid #fff;
+      margin-top: -32px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--text-hint);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    .profile-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+    .profile-headline { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+
+    .li-connect-btn {
+      background: var(--li-blue);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ── Next steps grid ── */
+    .next-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .next-item {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .next-item i { font-size: 22px; color: var(--li-blue); margin-bottom: 8px; display: block; }
+    .next-item .ni-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .next-item .ni-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Navigation ── */
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.25rem;
+      margin-top: 1.25rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-nav:hover:not(:disabled) { background: var(--surface-secondary); }
+    .btn-nav:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--li-blue);
+      color: #fff;
+      border-color: var(--li-blue);
+    }
+
+    .btn-primary:hover:not(:disabled) { background: var(--li-blue-dark); border-color: var(--li-blue-dark); }
+
+    .nav-count { font-size: 13px; color: var(--text-secondary); }
+
+    /* ── Footer ── */
+    .page-footer {
+      margin-top: 2rem;
+      font-size: 12px;
+      color: var(--text-hint);
+      text-align: center;
+    }
+
+    /* ── Animations ── */
+    .card-body { animation: fadeUp 0.3s ease; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .next-grid { grid-template-columns: 1fr 1fr; }
+      .steps-nav { gap: 4px; }
+      .step-pill { font-size: 11px; padding: 4px 9px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="li-logo-badge">in</div>
+    <div class="page-header-text">
+      <h1>Cómo crear una cuenta en LinkedIn</h1>
+      <p>Tutorial interactivo paso a paso · 5 pasos</p>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <span id="lbl-step" style="font-size:12px;color:var(--text-secondary);white-space:nowrap;">Paso 1 de 5</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:20%;"></div>
+    </div>
+    <span class="progress-label" id="lbl-pct">20%</span>
+  </div>
+
+  <!-- Step pills -->
+  <div class="steps-nav" id="steps-nav"></div>
+
+  <!-- Main card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge" id="badge-num">1</div>
+      <div class="card-header-text">
+        <div class="title" id="step-title"></div>
+        <div class="subtitle" id="step-subtitle"></div>
+      </div>
+    </div>
+    <div class="card-body" id="card-body"></div>
+  </div>
+
+  <p class="page-footer">Tutorial creado con fines educativos · Basado en la interfaz de LinkedIn 2025</p>
+
+  <script>
+    const steps = [
+      {
+        title: "Ingresar a LinkedIn",
+        subtitle: "Abrí tu navegador y andá a la página oficial",
+        pillLabel: "Ingresar",
+        icon: "ti-world",
+        render: () => `
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="dots">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+              </div>
+              <div class="url-bar">https://www.linkedin.com</div>
+            </div>
+            <div class="browser-content">
+              <div class="li-header">
+                <span class="li-wordmark">in</span>
+                <div class="li-btn-row">
+                  <button class="li-btn-o">Iniciar sesión</button>
+                  <button class="li-btn-p">Unirse ahora</button>
+                </div>
+              </div>
+              <p class="li-hero-h">Da la bienvenida a tu futuro profesional</p>
+              <p class="li-hero-s">Conectá con colegas, empresas y oportunidades de todo el mundo.</p>
+            </div>
+          </div>
+          <div class="tip-box">
+            <i class="ti ti-info-circle"></i>
+            <span>Siempre ingresá desde <strong>linkedin.com</strong> (el sitio oficial). Evitá hacer clic en links de mails desconocidos que digan ser de LinkedIn.</span>
+          </div>
+          <div class="checklist">
+            <div class="check-item"><i class="ti ti-circle-check"></i>Abrí tu navegador favorito (Chrome, Firefox, Edge o Safari).</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Escribí <strong>linkedin.com</strong> en la barra de direcciones y presioná Enter.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Vas a ver la pantalla de bienvenida con dos botones: <em>Iniciar sesión</em> y <em>Unirse ahora</em>.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Hacé clic en <strong style="color:var(--li-blue);">Unirse ahora</strong> para empezar el registro.</div>
+          </div>
+        `
+      },
+      {
+        title: "Crear tu cuenta",
+        subtitle: "Completá el formulario con tu correo y una contraseña segura",
+        pillLabel: "Registro",
+        icon: "ti-user-plus",
+        render: () => `
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="dots">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+              </div>
+              <div class="url-bar">https://www.linkedin.com/signup</div>
+            </div>
+            <div class="browser-content">
+              <p style="font-size:17px;font-weight:600;margin-bottom:14px;">Únete a LinkedIn</p>
+              <div class="form-stack">
+                <div class="field-group">
+                  <label class="field-label">Correo electrónico</label>
+                  <input class="field-input active-field" type="email" value="tu@email.com" readonly>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Contraseña (mínimo 6 caracteres)</label>
+                  <input class="field-input" type="password" value="••••••••••" readonly>
+                </div>
+                <button class="li-btn-p" style="width:100%;padding:10px;font-size:14px;">Aceptar y unirte</button>
+              </div>
+              <p style="font-size:11px;color:#888;text-align:center;">Al hacer clic aceptás el Acuerdo de usuario y la Política de privacidad de LinkedIn.</p>
+            </div>
+          </div>
+          <div class="warn-box">
+            <i class="ti ti-alert-triangle"></i>
+            <span>Usá una contraseña segura: combiná mayúsculas, números y un símbolo especial. No la reutilices en otros servicios.</span>
+          </div>
+          <div class="checklist">
+            <div class="check-item"><i class="ti ti-circle-check"></i>Ingresá tu correo electrónico válido — lo vas a necesitar para verificar la cuenta.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Elegí una contraseña de al menos 6 caracteres. Más larga = más segura.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Hacé clic en <strong style="color:var(--li-blue);">Aceptar y unirte</strong> para continuar.</div>
+          </div>
+        `
+      },
+      {
+        title: "Datos personales",
+        subtitle: "Tu nombre real y ubicación para que te encuentren",
+        pillLabel: "Perfil",
+        icon: "ti-id-badge",
+        render: () => `
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="dots">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+              </div>
+              <div class="url-bar">https://www.linkedin.com/signup/details</div>
+            </div>
+            <div class="browser-content">
+              <p style="font-size:15px;font-weight:600;margin-bottom:14px;">Completá tu perfil básico</p>
+              <div class="form-stack">
+                <div class="field-row">
+                  <div class="field-group">
+                    <label class="field-label">Nombre</label>
+                    <input class="field-input" type="text" placeholder="Ej: Ana" readonly>
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label">Apellido</label>
+                    <input class="field-input" type="text" placeholder="Ej: García" readonly>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">País o región</label>
+                  <input class="field-input active-field" type="text" value="Argentina" readonly>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Ciudad</label>
+                  <input class="field-input" type="text" value="San Miguel de Tucumán" readonly>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">¿Cuál es tu situación laboral actual?</label>
+                  <input class="field-input" type="text" value="Estudiante universitario/a" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <i class="ti ti-info-circle"></i>
+            <span>Usá tu nombre real. LinkedIn es una red profesional — reclutadores y colegas te van a buscar por tu nombre verdadero. Los alias o apodos pueden perjudicarte.</span>
+          </div>
+          <div class="checklist">
+            <div class="check-item"><i class="ti ti-circle-check"></i>Ingresá tu nombre y apellido tal como aparecen en tu documento.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Seleccioná tu país (<em>Argentina</em>) y ciudad.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Elegí tu situación laboral actual — si estudiás, seleccioná <em>Estudiante universitario/a</em>.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Hacé clic en <strong style="color:var(--li-blue);">Continuar</strong>.</div>
+          </div>
+        `
+      },
+      {
+        title: "Verificar tu correo",
+        subtitle: "LinkedIn te envía un código de 6 dígitos para confirmar tu identidad",
+        pillLabel: "Verificar",
+        icon: "ti-mail-check",
+        render: () => `
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="dots">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+              </div>
+              <div class="url-bar">https://www.linkedin.com/signup/verify</div>
+            </div>
+            <div class="browser-content" style="text-align:center;padding:1.5rem;">
+              <i class="ti ti-mail" style="font-size:40px;color:var(--li-blue);margin-bottom:10px;display:block;"></i>
+              <p style="font-size:16px;font-weight:600;margin-bottom:5px;">Verificá tu dirección de correo</p>
+              <p style="font-size:13px;color:#666;margin-bottom:1.25rem;">Enviamos un código de 6 dígitos a <strong>tu@email.com</strong></p>
+              <div class="otp-wrap">
+                <div class="otp-cell filled">3</div>
+                <div class="otp-cell filled">7</div>
+                <div class="otp-cell">_</div>
+                <div class="otp-cell">_</div>
+                <div class="otp-cell">_</div>
+                <div class="otp-cell">_</div>
+              </div>
+              <button class="li-btn-p" style="padding:9px 32px;font-size:14px;margin-top:4px;">Verificar</button>
+              <p style="margin-top:12px;font-size:12px;color:#888;">¿No recibiste el mail? <span style="color:var(--li-blue);cursor:pointer;">Reenviar código</span></p>
+            </div>
+          </div>
+          <div class="warn-box">
+            <i class="ti ti-alert-triangle"></i>
+            <span>Revisá tu carpeta de <strong>spam o correo no deseado</strong> si no ves el mail en la bandeja principal. El código vence en 15 minutos.</span>
+          </div>
+          <div class="success-box">
+            <i class="ti ti-circle-check"></i>
+            <span>Una vez verificado, ¡tu cuenta queda activa! Serás redirigido automáticamente a tu nuevo perfil.</span>
+          </div>
+          <div class="checklist">
+            <div class="check-item"><i class="ti ti-circle-check"></i>Abrí tu cliente de correo y buscá un mail de <em>LinkedIn</em> con el asunto "Tu código de verificación".</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Copiá el código de 6 dígitos e ingresalo en el formulario de LinkedIn.</div>
+            <div class="check-item"><i class="ti ti-circle-check"></i>Hacé clic en <strong style="color:var(--li-blue);">Verificar</strong> y esperá la confirmación.</div>
+          </div>
+        `
+      },
+      {
+        title: "¡Cuenta creada! Primeros pasos",
+        subtitle: "Lo que tenés que hacer el día uno para destacar en LinkedIn",
+        pillLabel: "¡Listo!",
+        icon: "ti-confetti",
+        render: () => `
+          <div class="profile-card">
+            <div class="profile-cover"></div>
+            <div class="profile-inner">
+              <div class="profile-ava"><i class="ti ti-user"></i></div>
+              <div class="profile-name">Tu Nombre</div>
+              <div class="profile-headline">Estudiante de Marketing · Tucumán, Argentina</div>
+              <button class="li-connect-btn"><i class="ti ti-plus" style="font-size:13px;"></i> Conectar</button>
+            </div>
+          </div>
+          <div class="success-box">
+            <i class="ti ti-circle-check"></i>
+            <span>¡Tu cuenta fue creada exitosamente! Ahora construí tu presencia profesional — las primeras horas son clave para que el algoritmo de LinkedIn te muestre a más personas.</span>
+          </div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;">Cuatro acciones prioritarias</p>
+          <div class="next-grid">
+            <div class="next-item">
+              <i class="ti ti-camera"></i>
+              <div class="ni-title">Foto de perfil</div>
+              <div class="ni-desc">Foto profesional, fondo neutro. Aumenta hasta 21× las visitas a tu perfil.</div>
+            </div>
+            <div class="next-item">
+              <i class="ti ti-pencil"></i>
+              <div class="ni-title">Titular profesional</div>
+              <div class="ni-desc">Más allá de tu título: contá qué hacés y qué valor aportás en pocas palabras.</div>
+            </div>
+            <div class="next-item">
+              <i class="ti ti-users"></i>
+              <div class="ni-title">Primeras conexiones</div>
+              <div class="ni-desc">Importá contactos o buscá compañeros y profesores de tu facultad en UNSTA.</div>
+            </div>
+            <div class="next-item">
+              <i class="ti ti-briefcase"></i>
+              <div class="ni-title">Educación y experiencia</div>
+              <div class="ni-desc">Agregá tus estudios en UNSTA y cualquier experiencia laboral o voluntariado.</div>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-bottom:0;">
+            <i class="ti ti-bulb"></i>
+            <span>Los perfiles completos reciben hasta <strong>40× más oportunidades</strong> que los incompletos. Vale la pena dedicarle 30 minutos el primer día.</span>
+          </div>
+        `
+      }
+    ];
+
+    let current = 0;
+
+    function renderPills() {
+      const nav = document.getElementById('steps-nav');
+      nav.innerHTML = steps.map((s, i) => {
+        let cls = 'step-pill';
+        if (i === current) cls += ' active';
+        else if (i < current) cls += ' done';
+        const icon = i < current ? 'ti-circle-check' : s.icon;
+        return `<div class="${cls}" onclick="goTo(${i})">
+          <span class="pill-num">${i < current ? '<i class="ti ti-check" style="font-size:10px;"></i>' : i + 1}</span>
+          ${s.pillLabel}
+        </div>`;
+      }).join('');
+    }
+
+    function renderStep() {
+      const s = steps[current];
+      const pct = Math.round(((current + 1) / steps.length) * 100);
+
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('lbl-step').textContent = `Paso ${current + 1} de ${steps.length}`;
+      document.getElementById('lbl-pct').textContent = pct + '%';
+      document.getElementById('badge-num').textContent = current + 1;
+      document.getElementById('step-title').textContent = s.title;
+      document.getElementById('step-subtitle').textContent = s.subtitle;
+
+      const isFirst = current === 0;
+      const isLast  = current === steps.length - 1;
+
+      document.getElementById('card-body').innerHTML = s.render() + `
+        <div class="nav-row">
+          <button class="btn-nav" onclick="prev()" ${isFirst ? 'disabled' : ''}>
+            <i class="ti ti-arrow-left"></i> Anterior
+          </button>
+          <span class="nav-count">${current + 1} / ${steps.length}</span>
+          ${isLast
+            ? `<button class="btn-nav btn-primary" onclick="window.open('https://www.linkedin.com/signup','_blank')">
+                Ir a LinkedIn <i class="ti ti-external-link"></i>
+               </button>`
+            : `<button class="btn-nav btn-primary" onclick="next()">
+                Siguiente <i class="ti ti-arrow-right"></i>
+               </button>`
+          }
+        </div>
+      `;
+
+      renderPills();
+    }
+
+    function next()   { if (current < steps.length - 1) { current++; renderStep(); } }
+    function prev()   { if (current > 0) { current--; renderStep(); } }
+    function goTo(i)  { current = i; renderStep(); }
+
+    renderStep();
+  </script>
+</body>
+</html>
